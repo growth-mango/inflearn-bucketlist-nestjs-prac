@@ -1,3 +1,4 @@
+import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -26,6 +27,8 @@ export class DestinationsController {
   }
 
   @Get('search') // search?q=keyword
+  @CacheKey('search')
+  @CacheTTL(1000 * 10)
   async searchDestinations(@Query('q') q: string) {
     return this.destinationService.search(q);
   }

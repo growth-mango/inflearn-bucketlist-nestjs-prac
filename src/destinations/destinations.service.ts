@@ -1,4 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDestinationDto } from 'src/destinations/dto/create-destination.dto';
 import { Destination } from 'src/destinations/entities/destination.entity';
@@ -9,6 +10,8 @@ export class DestinationsService {
   constructor(
     @InjectRepository(Destination)
     private readonly destinationsRepository: Repository<Destination>,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async create(model: CreateDestinationDto): Promise<Destination> {
@@ -27,7 +30,13 @@ export class DestinationsService {
   }
 
   async search(q: string): Promise<Destination[]> {
-    return this.destinationsRepository.find({
+    // const cachedResult: any = await this.cacheManager.get(`search-${q}`);
+
+    // if (cachedResult) {
+    //   return cachedResult;
+    // }
+
+    const result = await this.destinationsRepository.find({
       where: [
         {
           name: Like(`%${q}%`),
@@ -37,6 +46,10 @@ export class DestinationsService {
         },
       ],
     });
+
+    // await this.cacheManager.set(`search-${q}`, result, 1000 * 10);
+
+    return result;
   }
 
   async findById(id: number): Promise<Destination> {
