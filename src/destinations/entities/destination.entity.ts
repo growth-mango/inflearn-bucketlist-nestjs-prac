@@ -1,7 +1,14 @@
 import { BucketListItem } from 'src/bucket-list-items/entities/bucket-list-item.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
+@Index('idx_destination_description', ['description'])
 export class Destination {
   @PrimaryGeneratedColumn()
   id: number;
