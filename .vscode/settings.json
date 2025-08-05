@@ -1,0 +1,29 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "bucketlist-db",
+      "database": "bucketlist",
+      "username": "test",
+      "password": "test"
+    },
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": false
+        }
+      },
+      "previewLimit": 50,
+      "server": "inflearn-bucketlist.chm862yygn48.ap-northeast-2.rds.amazonaws.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Bucketlist-Production-DB",
+      "username": "postgres",
+      "password": "kTSeb7Zi6h6kKGWjv8bx",
+      "database": "postgres"
+    }
+  ]
+}
