@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDestinationDto } from 'src/destinations/dto/create-destination.dto';
 import { Destination } from 'src/destinations/entities/destination.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class DestinationsService {
@@ -24,6 +24,14 @@ export class DestinationsService {
 
   async findAll(): Promise<Destination[]> {
     return this.destinationsRepository.find();
+  }
+
+  async search(q: string): Promise<Destination[]> {
+    return this.destinationsRepository.find({
+      where: {
+        name: Like(`%${q}%`),
+      },
+    });
   }
 
   async findById(id: number): Promise<Destination> {
