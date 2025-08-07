@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -18,6 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
+  private readonly logger = new Logger(AuthService.name);
 
   //signUp
   async signUp(data: SignUpDto): Promise<any> {
@@ -25,6 +27,7 @@ export class AuthService {
     const existUser = await this.userService.findByUsername(data.username);
     if (existUser) {
       throw new BadRequestException(
+        this.logger.error(`${data.username}으로 이미 가입된 계정이 있습니다.`),
         `${data.username}으로 이미 가입된 계정이 있습니다.`,
       );
     }
@@ -39,6 +42,11 @@ export class AuthService {
     // user 대신 token 을 반환해야함
     const tokens = await this.getTokens(newUser);
     await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+
+    this.logger.log(
+      `[유저 회원가입 완료] 유저 아이디 : ${newUser.id} 유저 이름 : ${newUser.username}`,
+    );
+
     return tokens;
   }
 
