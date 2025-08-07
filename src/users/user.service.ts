@@ -46,4 +46,8 @@ export class UsersService {
   async remove(id: string): Promise<void> {
     await this.userRepository.delete({ id: id });
   }
+
+  async countAll(): Promise<number> {
+    return this.userRepository.count();
+  }
 }
